@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 
 export function PromoSection() {
   return (
-    <section className="py-0">
+    <section className="py-0 overflow-hidden">
       <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[480px]">
         {/* Left - Image */}
         <motion.div

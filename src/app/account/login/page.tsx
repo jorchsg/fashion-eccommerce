@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { loginSchema, type LoginFormData } from "@/lib/validations";
 import { toast } from "@/components/ui/use-toast";
+import { createClient } from "@/lib/supabase/client";
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -26,15 +27,30 @@ export default function LoginPage() {
     defaultValues: { rememberMe: false },
   });
 
-  const onSubmit = async (_data: LoginFormData) => {
-    await new Promise((res) => setTimeout(res, 1200));
-    // Simulated login — connect backend later
+  const onSubmit = async (data: LoginFormData) => {
+    const supabase = createClient();
+    const { error } = await supabase.auth.signInWithPassword({
+      email: data.email,
+      password: data.password,
+    });
+
+    if (error) {
+      toast({
+        title: "Sign in failed",
+        description: error.message,
+        variant: "destructive",
+      });
+      return;
+    }
+
     toast({
       title: "Welcome back!",
       description: "You have been successfully logged in.",
       variant: "success",
     });
-    router.push("/");
+    const params = new URLSearchParams(window.location.search);
+    router.push(params.get("redirectTo") ?? "/");
+    router.refresh();
   };
 
   return (

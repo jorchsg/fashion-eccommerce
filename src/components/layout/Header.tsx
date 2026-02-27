@@ -11,10 +11,13 @@ import {
   X,
   Heart,
   ChevronDown,
+  LogOut,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useCartStore } from "@/store/cart-store";
 import { useUIStore } from "@/store/ui-store";
+import { useAuthStore } from "@/store/auth-store";
+import { createClient } from "@/lib/supabase/client";
 import { NAV_ITEMS } from "@/data/categories";
 import { cn } from "@/lib/utils";
 
@@ -22,12 +25,27 @@ export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeNav, setActiveNav] = useState<string | null>(null);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
   const router = useRouter();
   const getTotalItems = useCartStore((s) => s.getTotalItems);
   const openCart = useCartStore((s) => s.openCart);
   const { isSearchOpen, toggleSearch, closeSearch, isMobileMenuOpen, toggleMobileMenu } =
     useUIStore();
+  const { user } = useAuthStore();
+
+  const handleSignOut = async () => {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    setIsUserMenuOpen(false);
+    router.push("/");
+    router.refresh();
+  };
+
+  const userDisplayName = user?.user_metadata?.full_name
+    ?? user?.user_metadata?.first_name
+    ?? user?.email?.split("@")[0]
+    ?? "Account";
 
   const totalItems = getTotalItems();
 
@@ -158,13 +176,60 @@ export function Header() {
               </button>
 
               {/* Account */}
-              <Link
-                href="/account/login"
-                className="hidden lg:flex p-2 text-gray-600 hover:text-black transition-colors"
-                aria-label="Account"
-              >
-                <User className="h-5 w-5" />
-              </Link>
+              {user ? (
+                <div className="relative hidden lg:block">
+                  <button
+                    onClick={() => setIsUserMenuOpen((v) => !v)}
+                    className="flex items-center gap-1.5 p-2 text-gray-600 hover:text-black transition-colors"
+                    aria-label="Account menu"
+                  >
+                    <User className="h-5 w-5" />
+                    <span className="text-xs font-medium tracking-wider max-w-[80px] truncate">
+                      {userDisplayName}
+                    </span>
+                    <ChevronDown className={cn("h-3 w-3 transition-transform duration-200", isUserMenuOpen && "rotate-180")} />
+                  </button>
+                  {isUserMenuOpen && (
+                    <>
+                      <div
+                        className="fixed inset-0 z-10"
+                        onClick={() => setIsUserMenuOpen(false)}
+                      />
+                      <div className="absolute right-0 top-full mt-1 w-48 bg-white shadow-lg border border-gray-100 z-20">
+                        <div className="px-4 py-3 border-b border-gray-100">
+                          <p className="text-xs text-gray-400">Signed in as</p>
+                          <p className="text-xs font-medium truncate">{user.email}</p>
+                        </div>
+                        <div className="py-1">
+                          <Link
+                            href="/account/wishlist"
+                            onClick={() => setIsUserMenuOpen(false)}
+                            className="flex items-center gap-2 px-4 py-2 text-xs tracking-wider uppercase text-gray-600 hover:text-black hover:bg-gray-50"
+                          >
+                            <Heart className="h-3.5 w-3.5" />
+                            Wishlist
+                          </Link>
+                          <button
+                            onClick={handleSignOut}
+                            className="flex items-center gap-2 w-full px-4 py-2 text-xs tracking-wider uppercase text-gray-600 hover:text-black hover:bg-gray-50"
+                          >
+                            <LogOut className="h-3.5 w-3.5" />
+                            Sign Out
+                          </button>
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </div>
+              ) : (
+                <Link
+                  href="/account/login"
+                  className="hidden lg:flex p-2 text-gray-600 hover:text-black transition-colors"
+                  aria-label="Account"
+                >
+                  <User className="h-5 w-5" />
+                </Link>
+              )}
             </div>
           </div>
         </div>
@@ -237,23 +302,46 @@ export function Header() {
                 </div>
               ))}
             </nav>
-            <div className="border-t p-6 flex gap-4">
-              <Link
-                href="/account/login"
-                onClick={toggleMobileMenu}
-                className="flex items-center gap-2 text-sm font-medium"
-              >
-                <User className="h-4 w-4" />
-                Account
-              </Link>
-              <Link
-                href="/account/wishlist"
-                onClick={toggleMobileMenu}
-                className="flex items-center gap-2 text-sm font-medium"
-              >
-                <Heart className="h-4 w-4" />
-                Wishlist
-              </Link>
+            <div className="border-t p-6 flex flex-col gap-4">
+              {user ? (
+                <>
+                  <p className="text-xs text-gray-400 truncate">{user.email}</p>
+                  <Link
+                    href="/account/wishlist"
+                    onClick={toggleMobileMenu}
+                    className="flex items-center gap-2 text-sm font-medium"
+                  >
+                    <Heart className="h-4 w-4" />
+                    Wishlist
+                  </Link>
+                  <button
+                    onClick={() => { handleSignOut(); toggleMobileMenu(); }}
+                    className="flex items-center gap-2 text-sm font-medium text-left"
+                  >
+                    <LogOut className="h-4 w-4" />
+                    Sign Out
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link
+                    href="/account/login"
+                    onClick={toggleMobileMenu}
+                    className="flex items-center gap-2 text-sm font-medium"
+                  >
+                    <User className="h-4 w-4" />
+                    Sign In
+                  </Link>
+                  <Link
+                    href="/account/wishlist"
+                    onClick={toggleMobileMenu}
+                    className="flex items-center gap-2 text-sm font-medium"
+                  >
+                    <Heart className="h-4 w-4" />
+                    Wishlist
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         </div>

@@ -2,16 +2,16 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Eye, EyeOff, Loader2, Check } from "lucide-react";
+import { Eye, EyeOff, Loader2, Check, Mail } from "lucide-react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { registerSchema, type RegisterFormData } from "@/lib/validations";
 import { toast } from "@/components/ui/use-toast";
+import { createClient } from "@/lib/supabase/client";
 
 const passwordRules = [
   { label: "At least 8 characters", regex: /.{8,}/ },
@@ -23,7 +23,8 @@ const passwordRules = [
 export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-  const router = useRouter();
+  const [emailSent, setEmailSent] = useState(false);
+  const [registeredEmail, setRegisteredEmail] = useState("");
 
   const {
     register,
@@ -37,15 +38,67 @@ export default function RegisterPage() {
 
   const password = watch("password", "");
 
-  const onSubmit = async (_data: RegisterFormData) => {
-    await new Promise((res) => setTimeout(res, 1400));
-    toast({
-      title: "Account created!",
-      description: "Welcome to MODO. You can now log in.",
-      variant: "success",
+  const onSubmit = async (data: RegisterFormData) => {
+    const supabase = createClient();
+    const { error } = await supabase.auth.signUp({
+      email: data.email,
+      password: data.password,
+      options: {
+        data: {
+          first_name: data.firstName,
+          last_name: data.lastName,
+          full_name: `${data.firstName} ${data.lastName}`,
+        },
+      },
     });
-    router.push("/account/login");
+
+    if (error) {
+      toast({
+        title: "Registration failed",
+        description: error.message,
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setRegisteredEmail(data.email);
+    setEmailSent(true);
   };
+
+  if (emailSent) {
+    return (
+      <div className="min-h-screen bg-[#f9f9f9] flex items-center justify-center p-6">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="w-full max-w-md text-center"
+        >
+          <div className="flex items-center justify-center w-16 h-16 rounded-full bg-green-100 mx-auto mb-6">
+            <Mail className="h-8 w-8 text-green-600" />
+          </div>
+          <h1 className="text-2xl font-serif font-bold tracking-tight uppercase mb-3">
+            Check Your Email
+          </h1>
+          <p className="text-sm text-gray-500 mb-2">
+            We sent a confirmation link to:
+          </p>
+          <p className="text-sm font-medium text-brand-dark mb-6">
+            {registeredEmail}
+          </p>
+          <p className="text-xs text-gray-400 mb-8">
+            Click the link in the email to activate your account. Check your spam folder if you don&apos;t see it within a few minutes.
+          </p>
+          <Link
+            href="/account/login"
+            className="text-sm font-medium underline underline-offset-2 hover:text-brand-red"
+          >
+            Back to Sign In
+          </Link>
+        </motion.div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#f9f9f9] flex">
