@@ -99,7 +99,6 @@ export function HeroSection() {
               <Button
                 asChild
                 variant="white-outline"
-                size="lg"
                 className="text-xs tracking-[0.2em]"
               >
                 <Link href="/products">Collections</Link>
@@ -107,7 +106,6 @@ export function HeroSection() {
               <Button
                 asChild
                 variant="white"
-                size="lg"
                 className="text-xs tracking-[0.2em] group"
               >
                 <Link href="/products" className="flex items-center gap-2">

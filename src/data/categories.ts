@@ -24,7 +24,7 @@ export const CATEGORIES: Category[] = [
     name: "Kids",
     slug: "kids",
     image:
-      "https://images.unsplash.com/photo-1503944583220-791c11b05b26?w=800&q=80",
+      "https://images.unsplash.com/photo-1471286174890-9c112ffca5b4?w=800&q=80",
     description: "Stylish and comfortable clothing for kids.",
     productCount: 0,
   },
@@ -60,7 +60,7 @@ export const FEATURED_CATEGORIES = [
     name: "Hoodie",
     slug: "hoodies",
     image:
-      "https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=600&q=80",
+      "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600&q=80",
     size: "medium" as const,
     badge: "Open with BUY and apply code HOOD25",
   },

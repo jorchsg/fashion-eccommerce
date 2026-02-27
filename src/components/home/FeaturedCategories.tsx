@@ -78,13 +78,10 @@ export function FeaturedCategories() {
                 <p className="text-white font-semibold text-lg tracking-[0.15em] uppercase mb-3">
                   Hoodie
                 </p>
-                <Link
-                  href="/products?sub=hoodies"
-                  className="inline-flex items-center gap-2 bg-white text-black text-[10px] tracking-[0.15em] uppercase px-4 py-2 hover:bg-brand-red hover:text-white transition-colors"
-                >
+                <span className="inline-flex items-center gap-2 bg-white text-black text-[10px] tracking-[0.15em] uppercase px-4 py-2 group-hover:bg-brand-red group-hover:text-white transition-colors">
                   Discover
                   <ArrowRight className="h-3 w-3" />
-                </Link>
+                </span>
               </div>
             </Link>
           </motion.div>

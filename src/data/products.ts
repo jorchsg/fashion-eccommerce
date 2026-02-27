@@ -8,7 +8,7 @@ export const PRODUCTS: Product[] = [
     brand: "MODO ORIGINALS",
     price: 120.99,
     images: [
-      "https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=600&q=80",
+      "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600&q=80",
       "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=600&q=80",
     ],
     category: "men",
@@ -28,7 +28,7 @@ export const PRODUCTS: Product[] = [
         name: "White",
         hex: "#FFFFFF",
         images: [
-          "https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=600&q=80",
+          "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600&q=80",
         ],
       },
       {
@@ -200,7 +200,7 @@ export const PRODUCTS: Product[] = [
     brand: "MODO ORIGINALS",
     price: 88.02,
     images: [
-      "https://images.unsplash.com/photo-1556306535-38febf6d6db5?w=600&q=80",
+      "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600&q=80",
     ],
     category: "accessories",
     subcategory: "hats",
@@ -215,14 +215,14 @@ export const PRODUCTS: Product[] = [
         name: "White",
         hex: "#FFFFFF",
         images: [
-          "https://images.unsplash.com/photo-1556306535-38febf6d6db5?w=600&q=80",
+          "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600&q=80",
         ],
       },
       {
         name: "Pink",
         hex: "#F9A8D4",
         images: [
-          "https://images.unsplash.com/photo-1556306535-38febf6d6db5?w=600&q=80",
+          "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600&q=80",
         ],
       },
     ],
@@ -243,7 +243,7 @@ export const PRODUCTS: Product[] = [
     brand: "MODO ORIGINALS",
     price: 75.09,
     images: [
-      "https://images.unsplash.com/photo-1611541053086-7cf7a8de38e9?w=600&q=80",
+      "https://images.unsplash.com/photo-1614252235316-8c857d38b5f4?w=600&q=80",
     ],
     category: "accessories",
     subcategory: "gloves",
@@ -259,7 +259,7 @@ export const PRODUCTS: Product[] = [
         name: "Black",
         hex: "#0A0A0A",
         images: [
-          "https://images.unsplash.com/photo-1611541053086-7cf7a8de38e9?w=600&q=80",
+          "https://images.unsplash.com/photo-1614252235316-8c857d38b5f4?w=600&q=80",
         ],
       },
     ],
